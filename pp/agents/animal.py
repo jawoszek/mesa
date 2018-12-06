@@ -5,7 +5,8 @@ from pp.agents.den import Den
 
 def is_far_from_its_den(animal):
     if not isinstance(animal, Animal):
-        return False
+        return True
+
     def den_of_this_species(target):
         return isinstance(target, Den) and target.species is type(animal)
     return not animal.neighbours(animal.action_range, den_of_this_species)
@@ -20,7 +21,7 @@ class Animal(Agent):
 
     def __init__(self, unique_id, model, breeding=None):
         super().__init__(unique_id, model)
-        self.energy = 600
+        self.energy = 60
         if breeding is None:
             self.breeding = random_breeding(type(self), model.random)
         else:
@@ -36,24 +37,26 @@ class Animal(Agent):
         self.model.space.move_agent(self, new_position)
 
     def eat(self, close_neighbours):
-        if self.energy > 600:
+        if self.energy > 80:
             return
 
         prey_in_range = self.closest_in_neighbours(self.feeds_on(), close_neighbours, is_far_from_its_den)
         if not prey_in_range:
             return
         victim = prey_in_range[0]
-        if not victim.is_renewable:
-            self.model.remove_agent(victim)
-        self.energy = 1000
+        victim.be_eaten()
+        self.energy = 100
 
     def get_old(self):
-        self.energy -= 1
+        self.energy -= self.energy_consumption
         if self.energy <= 0:
             self.model.remove_agent(self)
 
+    def be_eaten(self):
+        self.model.remove_agent(self)
+
     def step(self):
-        seen_neighbours = self.neighbours(self.sight_range)
+        seen_neighbours = self.neighbours(self.sight_range, is_far_from_its_den)
         close_neighbours = self.neighbours(self.action_range)
         self.move(seen_neighbours)
         self.eat(close_neighbours)
@@ -86,7 +89,7 @@ class Animal(Agent):
         raise NotImplementedError('Abstract function')
 
     def target_for_move(self):
-        if self.energy < 500:
+        if self.energy < 50:
             return self.feeds_on(), None
 
         def den_of_this_species(target):

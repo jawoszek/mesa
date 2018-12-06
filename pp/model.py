@@ -1,9 +1,18 @@
+from math import pi, sin
+
 from mesa.space import ContinuousSpace
 from mesa import Model
 from mesa.time import RandomActivation
 from mesa.datacollection import DataCollector
 from pp.agents.herbivore import Herbivore
 from pp.agents.predator import Predator
+from pp.agents.ecosystems import PlantEcosystem
+
+
+def sin_cycle(base, interval):
+    def cycle(step):
+        return int((sin(2*pi*step/interval)+2) * base)
+    return cycle
 
 
 def collect_predators_sum(model):
@@ -38,10 +47,12 @@ class PredatorPreyModel(Model):
             agent = type_of_agent(self.next_id(), self)
             self.add_agent(agent)
         self.data_collector.collect(self)
+        self.plant_ecosystem = PlantEcosystem(sin_cycle(5, 1000))
 
     def step(self):
         self.schedule.step()
         self.data_collector.collect(self)
+        self.plant_ecosystem.regulate(self)
 
     def remove_agent(self, agent):
         self.space.remove_agent(agent)
@@ -54,5 +65,5 @@ class PredatorPreyModel(Model):
         self.space.place_agent(agent, pos)
 
     def random_pos(self):
-        return  self.random.randrange(self.space.width),\
-                self.random.randrange(self.space.height)
+        return self.random.randrange(self.space.width),\
+               self.random.randrange(self.space.height)

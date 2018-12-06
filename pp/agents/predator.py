@@ -10,8 +10,8 @@ def predators_den(unique_id, model):
 class Predator(Animal):
     sight_range = 15
     action_range = 1
-    speed = 2
-    energy_consumption = 2
+    speed = 3
+    energy_consumption = 1
 
     def __init__(self, unique_id, model, breeding=None):
         super().__init__(unique_id, model, breeding)
