@@ -39,14 +39,15 @@ class Canvas(VisualizationElement):
 
 chart = ChartModule(
     [
-        {"Label": "Herbivores", "Color": "Green"},
-        {"Label": "Predators", "Color": "Red"}
+        {"Label": "Herbivores", "Color": "Blue"},
+        {"Label": "Predators", "Color": "Red"},
+        {"Label": "Plants", "Color": "Green"}
     ],
     data_collector_name='data_collector'
 )
 
 canvas = Canvas(how_to_draw, 500, 500)
-server = ModularServer(PredatorPreyModel, [canvas, chart], "Hey", {"width": 100, "height":100, "starting_agents":mock_input()})
+server = ModularServer(PredatorPreyModel, [canvas, chart], "Hey", {"width": 100, "height":100, "starting_agents": mock_input()})
 
 if __name__ == "__main__":
     server.launch()

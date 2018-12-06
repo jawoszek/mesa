@@ -6,29 +6,36 @@ from mesa.time import RandomActivation
 from mesa.datacollection import DataCollector
 from pp.agents.herbivore import Herbivore
 from pp.agents.predator import Predator
+from pp.agents.plant import Plant
 from pp.agents.ecosystems import PlantEcosystem
 
 
 def sin_cycle(base, interval):
     def cycle(step):
-        return int((sin(2*pi*step/interval)+2) * base)
+        return int((sin(2*pi*step/interval)*2+3) * base)
     return cycle
 
 
-def collect_predators_sum(model):
-    return len([
+def collect_agents_sum(type):
+    def collect(model):
+        return len([
             agent
             for agent in model.schedule.agents
-            if isinstance(agent, Predator)
+            if isinstance(agent, type)
         ])
+    return collect
+
+
+def collect_predators_sum(model):
+    return collect_agents_sum(Predator)(model)
 
 
 def collect_herbivores_sum(model):
-    return int(len([
-            agent
-            for agent in model.schedule.agents
-            if isinstance(agent, Herbivore)
-        ]))
+    return collect_agents_sum(Herbivore)(model)
+
+
+def collect_plants_sum(model):
+    return collect_agents_sum(Plant)(model)
 
 
 class PredatorPreyModel(Model):
@@ -39,7 +46,8 @@ class PredatorPreyModel(Model):
         self.data_collector = DataCollector(
             model_reporters={
                 "Herbivores": collect_herbivores_sum,
-                "Predators": collect_predators_sum
+                "Predators": collect_predators_sum,
+                "Plants": collect_plants_sum
              }
         )
 
@@ -47,7 +55,7 @@ class PredatorPreyModel(Model):
             agent = type_of_agent(self.next_id(), self)
             self.add_agent(agent)
         self.data_collector.collect(self)
-        self.plant_ecosystem = PlantEcosystem(sin_cycle(5, 1000))
+        self.plant_ecosystem = PlantEcosystem(sin_cycle(2, 100))
 
     def step(self):
         self.schedule.step()

@@ -13,7 +13,6 @@ def is_far_from_its_den(animal):
 
 
 class Animal(Agent):
-    is_renewable = False
     sight_range = None
     action_range = None
     speed = None
@@ -23,7 +22,7 @@ class Animal(Agent):
         super().__init__(unique_id, model)
         self.energy = 60
         if breeding is None:
-            self.breeding = random_breeding(type(self), model.random)
+            self.breeding = random_breeding(self, model.random)
         else:
             self.breeding = breeding
 
@@ -37,13 +36,15 @@ class Animal(Agent):
         self.model.space.move_agent(self, new_position)
 
     def eat(self, close_neighbours):
-        if self.energy > 80:
+        if self.energy > 95:
             return
 
         prey_in_range = self.closest_in_neighbours(self.feeds_on(), close_neighbours, is_far_from_its_den)
         if not prey_in_range:
             return
         victim = prey_in_range[0]
+        if self.model.random.random() < victim.chance_of_survival:
+            return
         victim.be_eaten()
         self.energy = 100
 

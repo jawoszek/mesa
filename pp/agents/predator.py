@@ -8,10 +8,10 @@ def predators_den(unique_id, model):
 
 
 class Predator(Animal):
-    sight_range = 15
+    sight_range = 40
     action_range = 1
-    speed = 3
-    energy_consumption = 1
+    speed = 5
+    energy_consumption = 0.6
 
     def __init__(self, unique_id, model, breeding=None):
         super().__init__(unique_id, model, breeding)
@@ -21,7 +21,7 @@ class Predator(Animal):
 
     @classmethod
     def breeding_interval(cls):
-        return 80
+        return 40
 
     @classmethod
     def breeding_age(cls):

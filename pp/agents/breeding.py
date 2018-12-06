@@ -1,28 +1,28 @@
-def random_breeding(species, random):
-    return random.choice([MaleBreeding, FemaleBreeding])(species)
+def random_breeding(animal, random):
+    return random.choice([MaleBreeding, FemaleBreeding])(animal)
 
 
 class MaleBreeding:
 
-    def __init__(self, species) -> None:
-        self.species = species
+    def __init__(self, animal) -> None:
+        self.animal = animal
         self.age = 0
 
     def get_old(self):
         self.age += 1
 
     def can_breed(self):
-        return self.species.breeding_age() <= self.age
+        return self.animal.breeding_age() <= self.age
 
     def breed(self):
-        pass
+        self.animal.energy -= 15
 
 
 class FemaleBreeding:
 
-    def __init__(self, species) -> None:
-        self.species = species
-        self.time_to_next_breeding = species.breeding_interval()
+    def __init__(self, animal) -> None:
+        self.animal = animal
+        self.time_to_next_breeding = animal.breeding_interval()
         self.age = 0
 
     def get_old(self):
@@ -31,7 +31,8 @@ class FemaleBreeding:
 
     def can_breed(self):
         return self.time_to_next_breeding <= 0\
-               and self.species.breeding_age() <= self.age
+               and self.animal.breeding_age() <= self.age
 
     def breed(self):
-        self.time_to_next_breeding = self.species.breeding_interval()
+        self.animal.energy -= 20
+        self.time_to_next_breeding = self.animal.breeding_interval()
