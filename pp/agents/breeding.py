@@ -15,7 +15,7 @@ class MaleBreeding:
         return self.animal.breeding_age() <= self.age
 
     def breed(self):
-        self.animal.energy -= 15
+        self.animal.energy -= self.animal.breeding_cost()
 
 
 class FemaleBreeding:

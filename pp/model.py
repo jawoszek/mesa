@@ -51,9 +51,13 @@ class PredatorPreyModel(Model):
              }
         )
 
-        for type_of_agent in starting_agents:
-            agent = type_of_agent(self.next_id(), self)
-            self.add_agent(agent)
+        for agent_template in starting_agents:
+            if isinstance(agent_template, tuple):
+                agent = agent_template[0](self.next_id(), self)
+                self.add_agent(agent, agent_template[1])
+            else:
+                agent = agent_template(self.next_id(), self)
+                self.add_agent(agent)
         self.data_collector.collect(self)
         self.plant_ecosystem = PlantEcosystem(sin_cycle(2, 100))
 
@@ -71,6 +75,13 @@ class PredatorPreyModel(Model):
             pos = self.random_pos()
         self.schedule.add(agent)
         self.space.place_agent(agent, pos)
+
+    def agents_with_type(self, agent_type):
+        return [
+            agent for agent
+            in self.schedule.agents
+            if isinstance(agent, agent_type)
+        ]
 
     def random_pos(self):
         return self.random.randrange(self.space.width),\

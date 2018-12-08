@@ -18,6 +18,7 @@ class Den(Agent):
     def __init__(self, unique_id, model, species):
         super().__init__(unique_id, model)
         self.species = species
+        self.countdown_to_repopulate = 50
 
     def step(self):
         def right_species(denizen):
@@ -25,6 +26,7 @@ class Den(Agent):
 
         denizens = self.neighbours(self.range, right_species)
         self.breed_denizens(denizens)
+        self.repopulate()
 
     def breed_denizens(self, denizens):
         closest_males = self.closest_in_neighbours(self.species, denizens,
@@ -41,3 +43,18 @@ class Den(Agent):
 
     def how_to_draw(self):
         return {"Shape": "circle", "r": 4, "Filled": "true", "Color": "Black"}
+
+    def repopulate(self):
+        population_minimum = 6
+        population_count = len(self.model.agents_with_type(self.species))
+        if population_count >= population_minimum:
+            self.countdown_to_repopulate = 50
+            return
+
+        self.countdown_to_repopulate -= 1
+        if self.countdown_to_repopulate >= 1:
+            return
+        to_populate = population_minimum - population_count
+        for _ in range(0, to_populate):
+            agent = self.species(self.model.next_id(), self.model)
+            self.model.add_agent(agent, self.pos)

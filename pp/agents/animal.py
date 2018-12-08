@@ -20,7 +20,7 @@ class Animal(Agent):
 
     def __init__(self, unique_id, model, breeding=None):
         super().__init__(unique_id, model)
-        self.energy = 60
+        self.energy = 100
         if breeding is None:
             self.breeding = random_breeding(self, model.random)
         else:
@@ -45,8 +45,11 @@ class Animal(Agent):
         victim = prey_in_range[0]
         if self.model.random.random() < victim.chance_of_survival:
             return
-        victim.be_eaten()
-        self.energy = 100
+        for victim in prey_in_range:
+            if self.model.random.random() > victim.chance_of_survival:
+                victim.be_eaten()
+                self.energy = 100
+                return
 
     def get_old(self):
         self.energy -= self.energy_consumption

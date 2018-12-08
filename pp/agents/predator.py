@@ -8,10 +8,10 @@ def predators_den(unique_id, model):
 
 
 class Predator(Animal):
-    sight_range = 40
-    action_range = 1
-    speed = 5
-    energy_consumption = 0.6
+    sight_range = 20
+    action_range = 4
+    speed = 3
+    energy_consumption = 1
 
     def __init__(self, unique_id, model, breeding=None):
         super().__init__(unique_id, model, breeding)
@@ -20,12 +20,16 @@ class Predator(Animal):
         return Herbivore
 
     @classmethod
-    def breeding_interval(cls):
+    def breeding_cost(cls):
         return 40
 
     @classmethod
+    def breeding_interval(cls):
+        return 15
+
+    @classmethod
     def breeding_age(cls):
-        return 40
+        return 10
 
     def how_to_draw(self):
         return {"Shape": "circle", "r": 2, "Filled": "true", "Color": "Red"}

@@ -10,11 +10,7 @@ class PlantEcosystem:
         self.cycle = cycle
 
     def regulate(self, model):
-        all_plants = [
-            agent for agent
-            in model.schedule.agents
-            if isinstance(agent, Plant)
-        ]
+        all_plants = model.agents_with_type(Plant)
         plants = sorted(
             sample(all_plants, k=len(all_plants)),
             key=attrgetter('feeders'),
