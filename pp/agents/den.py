@@ -45,7 +45,7 @@ class Den(Agent):
         return {"Shape": "circle", "r": 4, "Filled": "true", "Color": "Black"}
 
     def repopulate(self):
-        population_minimum = 6
+        population_minimum = 8
         population_count = len(self.model.agents_with_type(self.species))
         if population_count >= population_minimum:
             self.countdown_to_repopulate = 50

@@ -13,5 +13,5 @@ class Plant(Agent):
 
     def be_eaten(self):
         self.feeders += 1
-        if self.feeders > 20:
+        if self.feeders > 10:
             self.model.remove_agent(self)

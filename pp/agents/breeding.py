@@ -12,17 +12,17 @@ class MaleBreeding:
         self.age += 1
 
     def can_breed(self):
-        return self.animal.breeding_age() <= self.age
+        return self.animal.breeding_age <= self.age
 
     def breed(self):
-        self.animal.energy -= self.animal.breeding_cost()
+        self.animal.energy -= self.animal.breeding_cost
 
 
 class FemaleBreeding:
 
     def __init__(self, animal) -> None:
         self.animal = animal
-        self.time_to_next_breeding = animal.breeding_interval()
+        self.time_to_next_breeding = animal.breeding_interval
         self.age = 0
 
     def get_old(self):
@@ -31,8 +31,8 @@ class FemaleBreeding:
 
     def can_breed(self):
         return self.time_to_next_breeding <= 0\
-               and self.animal.breeding_age() <= self.age
+               and self.animal.breeding_age <= self.age
 
     def breed(self):
         self.animal.energy -= 20
-        self.time_to_next_breeding = self.animal.breeding_interval()
+        self.time_to_next_breeding = self.animal.breeding_interval

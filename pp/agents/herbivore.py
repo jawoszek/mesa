@@ -8,30 +8,22 @@ def herbivores_den(unique_id, model):
 
 
 class Herbivore(Animal):
-    chance_of_survival = 0.8
+    chance_of_survival = 0.5
 
     sight_range = 10
     action_range = 2
     speed = 2
     energy_consumption = 0.3
 
+    breeding_cost = 15
+    breeding_interval = 3
+    breeding_age = 5
+
     def __init__(self, unique_id, model, breeding=None):
         super().__init__(unique_id, model, breeding)
 
     def feeds_on(self):
         return Plant
-
-    @classmethod
-    def breeding_cost(cls):
-        return 5
-
-    @classmethod
-    def breeding_interval(cls):
-        return 15
-
-    @classmethod
-    def breeding_age(cls):
-        return 10
 
     def how_to_draw(self):
         return {"Shape": "circle", "r": 1, "Filled": "true", "Color": "Blue"}

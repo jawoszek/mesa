@@ -14,6 +14,8 @@ requires = [
     'pandas',
     'tornado >= 4.2, < 5.0.0',
     'tqdm',
+    'plotly',
+    'psutil'
 ]
 
 extras_require = {
